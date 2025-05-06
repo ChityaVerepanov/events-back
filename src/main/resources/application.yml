@@ -22,5 +22,5 @@ com:
       open-api:
         enabled: true
         api-version: 1.0.0
-        title: Flare
+        title: Events-Service-Backend
         description: Backend application integrating with firebase authentication and storage service to build a secure CRUD application
