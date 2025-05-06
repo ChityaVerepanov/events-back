@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   version: 1.0.0
-  title: Flare
+  title: Events-service
   description: Backend application integrating with firebase authentication and storage
     service to build a secure CRUD application
 servers:
