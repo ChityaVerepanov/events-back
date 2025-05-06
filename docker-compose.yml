@@ -36,5 +36,5 @@ services:
 
 
 networks:
-  semi-msa-network:
+  events-backend-network:
     driver: bridge
