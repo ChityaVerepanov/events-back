@@ -1,13 +1,35 @@
 version: '3.7'
 
+name: events-backend-group
 services:
-  backend-application:
+
+  events-backend:
     build:
       context: ./
       dockerfile: Dockerfile
-    container_name: backend-application
+    hostname: events-backend
+    container_name: events-backend
     ports:
-    - 8080:8080
+      - 43546:8855
+    networks:
+      - events-backend-network
+
+
+  events-backend-db:
+    mem_limit: 256m
+    cpus: '0.5'
+    image: postgres:10.23-alpine3.16
+    hostname: events-backend-db
+    container_name: events-backend-db
     environment:
-      FIREBASE_PRIVATE_KEY:
-      FIREBASE_WEB_API_KEY:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=events-backend
+      - TZ=Asia/Yekaterinburg
+    volumes:
+      - ./_db/events-backend:/var/lib/postgresql/data
+    ports:
+      - 5455:5432
+    networks:
+      - events-backend-network
+    restart: unless-stopped
