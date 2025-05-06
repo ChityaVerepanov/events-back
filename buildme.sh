@@ -7,3 +7,5 @@ export CACHE_BUST=$(date +"%Y%H%M%S")
 docker compose build --build-arg CACHE_BUST=${CACHE_BUST}
 
 docker compose up -d
+
+docker compose logs -f events-backend
