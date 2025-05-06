@@ -5,6 +5,8 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
+      args:
+        CACHE_BUST: ${CACHE_BUST}
     hostname: events-backend
     container_name: events-backend
     ports:
