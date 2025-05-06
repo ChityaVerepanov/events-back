@@ -33,3 +33,8 @@ services:
     networks:
       - events-backend-network
     restart: unless-stopped
+
+
+networks:
+  semi-msa-network:
+    driver: bridge
