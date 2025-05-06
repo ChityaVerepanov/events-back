@@ -3,7 +3,7 @@
 git fetch origin
 git reset --hard origin/main
 #git pull
-echo "Repository loaded...."
+echo "Repository loaded..."
 
 chmod +x -- "$0"
 echo "Script permission restored. If failed? start manually: 'chmod +x buildme.sh'"
