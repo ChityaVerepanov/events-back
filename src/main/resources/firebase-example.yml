@@ -1,0 +1,21 @@
+# File to place JSON config grabbed from Firebase project page.
+# Tabs must be strict!
+com:
+  behl:
+    flare:
+      firebase:
+        private-key: |
+          {
+            "type": "...",
+            "project_id": "...",
+            "private_key_id": "...",
+            "private_key": "... very long ...",
+            "client_email": "...",
+            "client_id": "...",
+            "auth_uri": "...",
+            "token_uri": "...",
+            "auth_provider_x509_cert_url": "...",
+            "client_x509_cert_url": "...",
+            "universe_domain": "..."
+          }
+        web-api-key: AIzaSy_ThisIsAWEBAPI_Example_dh5K6UVmw8

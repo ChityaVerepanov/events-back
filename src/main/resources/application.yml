@@ -1,0 +1,21 @@
+server:
+  port: 8855
+spring:
+  application:
+    name: flare
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true
+  config:
+    # You must create your 'firebase.yml' file and place it near 'application.yml'.
+    # You can view 'firebase-example.yml' as a formatting example
+    import: optional:classpath:firebase.yml
+
+com:
+  behl:
+    flare:
+      open-api:
+        enabled: true
+        api-version: 1.0.0
+        title: Flare
+        description: Backend application integrating with firebase authentication and storage service to build a secure CRUD application
