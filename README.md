@@ -1,4 +1,22 @@
+# Project has been cloned from there: https://github.com/hardikSinghBehl/firebase-integration-spring-boot
+
+
+
+Before building you must clone repository, then create file **src\main\resources\firebase.yml** which contains parameters that Firebase web-console provide as downloaded json-file. Please view **src\main\resources\firebase-example.yml**
+
+When file **src\main\resources\firebase.yml** is created and placed, you can set permissions and execute this script:
+
+```
+chmod +x buildme.sh
+buildme.sh
+```
+
+
+
+# Original text:
+
 ## Firebase Authentication and Firestore Integration in Spring Boot
+
 ##### A reference proof-of-concept that leverages [Firestore Database](https://firebase.google.com/docs/firestore) to perform CRUD operations and  [Firebase Authentication](https://firebase.google.com/docs/auth) with Spring-Security to authenticate users. 
 ##### 🛠 upgraded to Spring Boot 3 and Spring Security 6 🛠 
 
@@ -39,7 +57,7 @@ In the event of authentication failure, when the access token received in the HT
 }
 ```
 The above JSON response is dispatched to the client as a result of [CustomAuthenticationEntryPoint](https://github.com/hardikSinghBehl/firebase-integration-spring-boot/blob/main/src/main/java/com/behl/flare/configuration/CustomAuthenticationEntryPoint.java) configured within the [SecurityConfiguration](https://github.com/hardikSinghBehl/firebase-integration-spring-boot/blob/main/src/main/java/com/behl/flare/configuration/SecurityConfiguration.java) which assumes any exception thrown by the Security filter is due to token verification failure. Hence, the implementation instantiates [TokenVerificationException](https://github.com/hardikSinghBehl/firebase-integration-spring-boot/blob/main/src/main/java/com/behl/flare/exception/TokenVerificationException.java) and delegates the responsibility of exception handling to [ExceptionResponseHandler](https://github.com/hardikSinghBehl/firebase-integration-spring-boot/blob/main/src/main/java/com/behl/flare/exception/ExceptionResponseHandler.java).
- 
+
 ---
 
 ### Local Setup
