@@ -12,11 +12,9 @@ services:
     ports:
       - 43546:8855
     environment:
-#      - SPRING_PROFILES_ACTIVE=${PROFILE}
-#      - CONFIG_PORT=${CONFIG_PORT}
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
       - SPRING_DATASOURCE_URL=jdbc:postgresql://events-backend-db/events-backend
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
     networks:
       - events-backend-network
 
