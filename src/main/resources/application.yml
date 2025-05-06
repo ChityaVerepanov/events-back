@@ -2,7 +2,7 @@ server:
   port: 8855
 spring:
   application:
-    name: flare
+    name: events-service
   jackson:
     deserialization:
       fail-on-unknown-properties: true
@@ -10,6 +10,11 @@ spring:
     # You must create your 'firebase.yml' file and place it near 'application.yml'.
     # You can view 'firebase-example.yml' as a formatting example
     import: optional:classpath:firebase.yml
+  datasource:
+    url: jdbc:postgresql://localhost:5432/events-backend
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
 
 com:
   behl:
