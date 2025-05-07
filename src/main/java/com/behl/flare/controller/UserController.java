@@ -1,8 +1,17 @@
 package com.behl.flare.controller;
 
+import com.behl.flare.dto.UserResponse;
+import java.util.UUID;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.behl.flare.configuration.PublicEndpoint;
 import com.behl.flare.dto.ExceptionResponseDto;
 import com.behl.flare.dto.TokenSuccessResponseDto;
-import com.behl.flare.dto.UserCreationRequestDto;
+import com.behl.flare.dto.UserCreationRequest;
 import com.behl.flare.dto.UserLoginRequestDto;
 import com.behl.flare.service.UserService;
 
@@ -26,7 +35,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/users")
 @Tag(name = "User Management", description = "Endpoints for user account and authentication management")
 public class UserController {
 
@@ -42,7 +51,7 @@ public class UserController {
 					content = @Content(schema = @Schema(implementation = ExceptionResponseDto.class))),
 			@ApiResponse(responseCode = "400", description = "Invalid request body",
 					content = @Content(schema = @Schema(implementation = ExceptionResponseDto.class))) })
-	public ResponseEntity<HttpStatus> createUser(@Valid @RequestBody final UserCreationRequestDto userCreationRequest) {
+	public ResponseEntity<HttpStatus> createUser(@Valid @RequestBody final UserCreationRequest userCreationRequest) {
 		userService.create(userCreationRequest);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
@@ -61,5 +70,17 @@ public class UserController {
 		final var response = userService.login(userLoginRequest);
 		return ResponseEntity.ok(response);
 	}
+
+
+    @PublicEndpoint
+    @Operation(summary = "Получение списка пользователей с пейджингом")
+    @ApiResponse(responseCode = "200", description = "Success request")
+    @GetMapping
+    public Page<UserResponse> getUsers(
+            @PageableDefault(page = 0, size = 10) @ParameterObject Pageable pageable
+    ) {
+        return userService.getUsersPageable(pageable);
+    }
+
 
 }
