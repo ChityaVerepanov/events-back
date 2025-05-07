@@ -71,10 +71,11 @@ public class UserController {
 	}
 
 
-//    @PublicEndpoint
 	@PreAuthorize("hasRole('ADMIN')")
 //	@PreAuthorize("hasAnyRole('ROLE1', 'ROLE2')")
-    @Operation(summary = "Получение списка пользователей с пейджингом")
+    @Operation(
+			summary = "Получение списка пользователей с пейджингом",
+			description = "Требуемые роли: ADMIN")
     @ApiResponse(responseCode = "200", description = "Success request")
     @GetMapping
     public Page<UserResponse> getUsers(

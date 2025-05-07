@@ -15,9 +15,9 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://events-backend-db/events-backend
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
-      - APPLICATION_ADMIN-EMAIL=${ADMIN-EMAIL}
-      - APPLICATION_ADMIN-PASSWORD=${ADMIN-PASSWORD}
-      - APPLICATION_ADMIN-NAME=${ADMIN-NAME}
+      - APPLICATION_ADMIN_EMAIL=${ADMIN-EMAIL}
+      - APPLICATION_ADMIN_PASSWORD=${ADMIN-PASSWORD}
+      - APPLICATION_ADMIN_NAME=${ADMIN-NAME}
     networks:
       - events-backend-network
 

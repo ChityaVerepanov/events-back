@@ -27,11 +27,11 @@ public class AdminAccountInitializer implements CommandLineRunner {
 
     private final UserJpaRepository userJpaRepository;
 
-    @Value("${application.admin-email}")
+    @Value("${application.admin.email}")
     private String adminEmail;
-    @Value("${application.admin-password}")
+    @Value("${application.admin.password}")
     private String adminPassword;
-    @Value("${application.admin-name}")
+    @Value("${application.admin.name}")
     private String adminName;
 
     private static final Logger log = LoggerFactory.getLogger(AdminAccountInitializer.class);

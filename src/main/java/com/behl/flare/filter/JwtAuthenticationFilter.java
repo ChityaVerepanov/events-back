@@ -67,13 +67,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 // Получение локального юзера (создание при необходимости)
                 User user = userService.getUserOrCreate(String.valueOf(userId), firebaseToken);
-
-                // fixme debug
-                user.setRole(Roles.ROLE_USER);
-//                user.setRole(Roles.ROLE_ADMIN);
-
-                // todo Здесь добавить проверку прав по ролям ?
-
 //                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, null);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         user,
