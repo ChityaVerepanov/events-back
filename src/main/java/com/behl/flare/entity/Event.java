@@ -5,9 +5,10 @@ import java.util.Date;
 import lombok.Getter;
 import lombok.Setter;
 
+@Deprecated
 @Getter
 @Setter
-public class Task {
+public class Event {
 
 	private static final String ENTITY_NAME = "tasks";
 

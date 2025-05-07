@@ -1,0 +1,133 @@
+package com.behl.flare.service;
+
+import com.behl.flare.entity.EventCard;
+import com.behl.flare.entity.User;
+import com.behl.flare.mappers.EventCardMapper;
+import com.behl.flare.repository.EventCardJpaRepository;
+import jakarta.transaction.Transactional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import com.behl.flare.dto.EventCardRequest;
+import com.behl.flare.dto.EventCardResponse;
+import com.behl.flare.entity.Event;
+import com.behl.flare.exception.InvalidTaskIdException;
+import com.behl.flare.exception.TaskOwnershipViolationException;
+import com.behl.flare.utility.AuthenticatedUserIdProvider;
+import com.behl.flare.utility.DateUtility;
+import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.Firestore;
+
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+
+@Service
+@RequiredArgsConstructor
+public class EventService {
+
+    private final Firestore firestore;
+    private final DateUtility dateUtility;
+    private final AuthenticatedUserIdProvider authenticatedUserIdProvider;
+    private final EventCardJpaRepository eventCardJpaRepository;
+    private final EventCardMapper eventCardMapper;
+    private final UserService userService;
+
+
+    @Transactional
+    public EventCardResponse getEventCard(Long taskId) {
+        EventCard eventCard = eventCardJpaRepository.findById(taskId).orElseThrow();
+        EventCardResponse response = eventCardMapper.toResponse(eventCard);
+        return response;
+    }
+
+
+    public Page<EventCardResponse> getEventCards(Pageable pageable) {
+        Page<EventCard> all = eventCardJpaRepository.findAll(pageable);
+        Page<EventCardResponse> response = all.map(eventCardMapper::toResponse);
+        return response;
+    }
+
+
+    @Transactional
+    public void createEventCard(@NonNull final EventCardRequest request) {
+        EventCard eventCard = eventCardMapper.toEntity(request);
+        User currentUser = userService.getCurrentUser();
+        eventCard.setCreator(currentUser);
+        eventCardJpaRepository.save(eventCard);
+    }
+
+
+    @Transactional
+    public void updateEventCard(Long eventId, EventCardRequest request) {
+        User currentUser = userService.getCurrentUser();
+        EventCard eventCard = eventCardJpaRepository.findById(eventId).orElseThrow();
+        if (currentUser.isCreatorOf(eventCard) || currentUser.isAdmin()) {
+            eventCardMapper.updateEntityFromRequest(request, eventCard);
+            eventCardJpaRepository.save(eventCard);
+        }
+    }
+
+
+    /**
+     * CREATOR может удалять только свои карточки
+     */
+    @Transactional
+    public void delete(Long eventId) {
+        User currentUser = userService.getCurrentUser();
+        EventCard eventCard = eventCardJpaRepository.findById(eventId).orElseThrow();
+        if (currentUser.isCreatorOf(eventCard) || currentUser.isAdmin()) {
+            eventCardJpaRepository.delete(eventCard);
+        }
+    }
+
+    /**
+     * Verifies if the given task belongs to the current authenticated user.
+     *
+     * @param event the record to be verified for ownership.
+     * @throws IllegalArgumentException        if provided argument is {@code null}
+     * @throws TaskOwnershipViolationException on validation failure
+     */
+    private void verifyTaskOwnership(@NonNull final Event event) {
+        final var userId = authenticatedUserIdProvider.getUserId();
+        final var taskBelongsToUser = event.getCreatedBy().equals(userId);
+        if (Boolean.FALSE.equals(taskBelongsToUser)) {
+            throw new TaskOwnershipViolationException();
+        }
+    }
+
+    /**
+     * Retrieves a task document from Firestore database corresponding to
+     * its document ID.
+     *
+     * @param taskId the ID of the task document to retrieve
+     * @return the DocumentSnapshot representing the retrieved task document
+     * @throws InvalidTaskIdException if no task exists corresponding to given taskId
+     */
+    @SneakyThrows
+    private DocumentSnapshot get(@NonNull final String taskId) {
+        final var retrievedDocument = firestore.collection(Event.name()).document(taskId).get().get();
+        final var documentExists = retrievedDocument.exists();
+        if (Boolean.FALSE.equals(documentExists)) {
+            throw new InvalidTaskIdException("No task exists in the system with provided-id");
+        }
+        return retrievedDocument;
+    }
+
+/*
+    private EventCardResponse creatResponse(final DocumentSnapshot document, final Event event) {
+        return EventCardResponse.builder()
+                .id(document.getId())
+                .title(event.getTitle())
+                .status(event.getStatus())
+                .description(event.getDescription())
+                .createdAt(dateUtility.convert(document.getCreateTime()))
+                .updatedAt(dateUtility.convert(document.getUpdateTime()))
+                .build();
+    }
+*/
+
+
+}

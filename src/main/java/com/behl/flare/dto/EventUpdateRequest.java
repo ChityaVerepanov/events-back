@@ -18,7 +18,7 @@ import lombok.Setter;
 @Setter
 @JsonNaming(value = PropertyNamingStrategies.UpperCamelCaseStrategy.class)
 @Schema(title = "TaskUpdationRequest", accessMode = Schema.AccessMode.WRITE_ONLY)
-public class TaskUpdationRequestDto {
+public class EventUpdateRequest {
 
 	@NotBlank(message = "Description must not be empty")
 	@Schema(requiredMode = RequiredMode.REQUIRED, description = "description of task", example = "Resolve user authentication issue detailed in Jira#9051")

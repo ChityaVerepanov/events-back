@@ -11,6 +11,8 @@ import jakarta.transaction.Transactional;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.behl.flare.client.FirebaseAuthClient;
@@ -158,5 +160,14 @@ public class UserService {
     @Transactional
     public void setUserRole(User user, Roles role) {
         user.setRole(role);
+    }
+
+
+    /**
+     * Получение текущего юзера
+     */
+    public User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return (User) authentication.getPrincipal();
     }
 }

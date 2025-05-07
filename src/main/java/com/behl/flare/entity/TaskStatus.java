@@ -1,5 +1,6 @@
 package com.behl.flare.entity;
 
+@Deprecated
 public enum TaskStatus {
 	
 	NEW,

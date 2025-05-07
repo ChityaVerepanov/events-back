@@ -1,7 +1,6 @@
 package com.behl.flare.entity;
 
 import com.behl.flare.enums.Roles;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -48,4 +47,12 @@ public class User {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "creator")
     private List<EventCard> eventCards = new ArrayList<>();
 
+
+    public boolean isCreatorOf(EventCard eventCard) {
+        return eventCard.getCreator().getId().equals(id);
+    }
+
+    public boolean isAdmin() {
+        return role == Roles.ROLE_ADMIN;
+    }
 }
