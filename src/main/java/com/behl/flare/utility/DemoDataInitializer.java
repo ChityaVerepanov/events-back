@@ -1,30 +1,15 @@
 package com.behl.flare.utility;
 
 import com.behl.flare.dto.UserCreationRequest;
+import com.behl.flare.enums.Roles;
 import com.behl.flare.service.UserService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Profile;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * Создатель демо-данных
@@ -68,7 +53,7 @@ public class DemoDataInitializer implements CommandLineRunner {
             request.setEmail(email);
             request.setPassword(name);
             request.setPhoneNumber(phone);
-            userService.create(request);
+            userService.createFirebaseUser(request, Roles.ROLE_ADMIN);
         }
     }
 

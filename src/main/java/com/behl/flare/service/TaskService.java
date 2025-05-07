@@ -54,6 +54,7 @@ public class TaskService {
 	@SneakyThrows
 	public List<TaskResponseDto> retrieve() {
 		final var userId = authenticatedUserIdProvider.getUserId();
+		final var user = authenticatedUserIdProvider.getUser();
 		return firestore.collection(Task.name()).whereEqualTo("createdBy", userId)
 				.get().get().getDocuments()
 				.stream()

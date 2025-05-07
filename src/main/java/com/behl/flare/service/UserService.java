@@ -2,16 +2,15 @@ package com.behl.flare.service;
 
 import com.behl.flare.dto.UserResponse;
 import com.behl.flare.entity.User;
+import com.behl.flare.enums.Roles;
 import com.behl.flare.mappers.UserMapper;
 import com.behl.flare.repository.UserJpaRepository;
-import com.google.firebase.auth.ListUsersPage;
+import com.google.firebase.auth.FirebaseToken;
 import com.google.firebase.auth.UserRecord;
 import jakarta.transaction.Transactional;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.beans.factory.annotation.Value;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.behl.flare.client.FirebaseAuthClient;
@@ -63,12 +62,13 @@ public class UserService {
      * creation request details.
      *
      * @param userCreationRequest the request containing user creation details
+     * @param role                - роль юзера
      * @throws IllegalArgumentException      if provided argument is {@code null}
      * @throws AccountAlreadyExistsException If an account with the provided email-id already exists.
      */
     @Transactional
     @SneakyThrows
-    public void create(@NonNull final UserCreationRequest userCreationRequest) {
+    public void createFirebaseUser(@NonNull final UserCreationRequest userCreationRequest, Roles role) {
         final var request = new CreateRequest();
         request.setEmail(userCreationRequest.getEmail());
         request.setPassword(userCreationRequest.getPassword());
@@ -77,11 +77,6 @@ public class UserService {
         UserRecord userRecord;
         try {
             userRecord = firebaseAuth.createUser(request);
-
-
-//			ListUsersPage listUsersPage = firebaseAuth.listUsers(null);
-//			int q = 0;
-
         } catch (final FirebaseAuthException exception) {
             if (exception.getMessage().contains("EMAIL_EXISTS")) {
                 throw new AccountAlreadyExistsException("Account with provided email-id already exists");
@@ -89,14 +84,34 @@ public class UserService {
             throw exception;
         }
 
-        User user = new User();
-        user.setFirebaseId(userRecord.getUid());
-        user.setEmail(userCreationRequest.getEmail());
-        user.setDisplayName(userCreationRequest.getDisplayName());
-        user.setPhoneNumber(userCreationRequest.getPhoneNumber());
-        userJpaRepository.save(user);
-
+        // Создание/обновление локального юзера
+        updateUser(
+                userCreationRequest.getEmail(),
+                userRecord.getUid(),
+                userCreationRequest.getDisplayName(),
+                userCreationRequest.getPhoneNumber(),
+                role);
     }
+
+
+    /**
+     * Создание / обновление локального юзера
+     */
+    @Transactional
+    public void updateUser(String email, String firebaseId, String displayName, String phoneNumber, Roles role) {
+        // Создание/обновление локального юзера
+        User user = userJpaRepository.findByEmail(email)
+                .stream()
+                .findFirst()
+                .orElseGet(User::new);
+        user.setFirebaseId(firebaseId);
+        user.setEmail(email);
+        user.setDisplayName(StringUtils.stripToEmpty(displayName));
+        user.setPhoneNumber(StringUtils.stripToEmpty(phoneNumber));
+        user.setRole(role);
+        userJpaRepository.save(user);
+    }
+
 
     /**
      * Validates user login credentials and generates an access token on successful
@@ -119,5 +134,29 @@ public class UserService {
         Page<User> all = userJpaRepository.findAll(pageable);
         Page<UserResponse> response = all.map(userMapper::toResponse);
         return response;
+    }
+
+
+    /**
+     * Получение пользователя (создание при необходимости)
+     */
+    @Transactional
+    public User getUserOrCreate(String firebaseId, FirebaseToken firebaseToken) {
+        return userJpaRepository.findByFirebaseId(firebaseId).orElseGet(() -> {
+            User user = userMapper.toEntity(firebaseId, firebaseToken);
+            return userJpaRepository.save(user);
+        });
+    }
+
+
+    /**
+     * Установка новой роли для юзера
+     *
+     * @param user
+     * @param role
+     */
+    @Transactional
+    public void setUserRole(User user, Roles role) {
+        user.setRole(role);
     }
 }

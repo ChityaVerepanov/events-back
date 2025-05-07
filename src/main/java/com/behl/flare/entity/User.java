@@ -10,6 +10,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "users")
+@Table(name = "users", indexes = @Index(columnList = "firebaseId"))
 public class User {
 
     @Id
@@ -30,7 +31,7 @@ public class User {
     @Column(name = "firebase_id", nullable = false, unique = true)
     private String firebaseId;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Column(name = "phone_number")
@@ -41,7 +42,8 @@ public class User {
 
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
-    private Roles role = Roles.USER;
+//    private Roles role = Roles.USER;
+    private Roles role = Roles.ROLE_USER;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "creator")
     private List<EventCard> eventCards = new ArrayList<>();

@@ -1,7 +1,12 @@
 package com.behl.flare.enums;
 
 public enum Roles {
-    ADMIN,
+/*
     USER,
+    ADMIN,
     CREATOR
+*/
+    ROLE_USER,
+    ROLE_ADMIN,
+    ROLE_CREATOR
 }

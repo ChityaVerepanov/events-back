@@ -1,5 +1,6 @@
 package com.behl.flare.utility;
 
+import com.behl.flare.entity.User;
 import java.util.Optional;
 
 import org.springframework.security.core.Authentication;
@@ -28,10 +29,28 @@ public class AuthenticatedUserIdProvider {
 	 *                               the JwtAuthenticationFilter
 	 */
 	public String getUserId() {
+//		return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
+//		        .map(Authentication::getPrincipal)
+//		        .filter(String.class::isInstance)
+//		        .map(String.class::cast)
+//		        .orElseThrow(IllegalStateException::new);
+		return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
+				.map(Authentication::getPrincipal)
+				.filter(User.class::isInstance)
+				.map(User.class::cast)
+				.map(User::getFirebaseId)
+				.orElseThrow(IllegalStateException::new);
+	}
+
+
+	/**
+	 * Получение юзера из секьюрного контекста
+	 */
+	public User getUser() {
 		return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
 		        .map(Authentication::getPrincipal)
-		        .filter(String.class::isInstance)
-		        .map(String.class::cast)
+		        .filter(User.class::isInstance)
+		        .map(User.class::cast)
 		        .orElseThrow(IllegalStateException::new);
 	}
 

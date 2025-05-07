@@ -1,6 +1,7 @@
 package com.behl.flare.exception;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -84,6 +86,19 @@ public class ExceptionResponseHandler extends ResponseEntityExceptionHandler {
 
 		exceptionResponse.setDescription(description);
 		return ResponseEntity.badRequest().body(exceptionResponse);
+	}
+
+
+	@ExceptionHandler(AccessDeniedException.class)
+	public ResponseEntity<?> handleAccessDeniedException(AccessDeniedException exception) {
+		logException(exception);
+		return ResponseEntity
+				.status(HttpStatus.FORBIDDEN)
+				.body(Map.of(
+						"status", HttpStatus.FORBIDDEN.value(),
+						"error", "Forbidden",
+						"message", "У вас недостаточно прав"
+				));
 	}
 
 	@ResponseBody

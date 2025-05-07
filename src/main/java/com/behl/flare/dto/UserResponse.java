@@ -15,7 +15,7 @@ public class UserResponse {
     private String email;
     private String phoneNumber;
     private String displayName;
-    private Roles role = Roles.USER;
+    private Roles role;
     private List<Long> eventCards = new ArrayList<>();
 
 }

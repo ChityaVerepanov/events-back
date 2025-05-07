@@ -1,4 +1,4 @@
-package com.behl.flare.configuration;
+package com.behl.flare.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

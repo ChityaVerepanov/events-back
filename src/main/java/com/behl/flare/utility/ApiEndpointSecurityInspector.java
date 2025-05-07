@@ -14,7 +14,7 @@ import org.springframework.util.AntPathMatcher;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import com.behl.flare.configuration.OpenApiConfigurationProperties;
-import com.behl.flare.configuration.PublicEndpoint;
+import com.behl.flare.annotations.PublicEndpoint;
 
 import io.swagger.v3.oas.models.PathItem.HttpMethod;
 import jakarta.annotation.PostConstruct;
@@ -28,7 +28,7 @@ import lombok.RequiredArgsConstructor;
  * based on their security configuration. It works in conjunction with the
  * mappings of controller methods annotated with {@link PublicEndpoint}.
  * 
- * @see com.behl.flare.configuration.PublicEndpoint
+ * @see PublicEndpoint
  * @see com.behl.flare.configuration.OpenApiConfigurationProperties
  */
 @Component
@@ -85,6 +85,10 @@ public class ApiEndpointSecurityInspector {
 		unsecuredApiPaths = Optional.ofNullable(unsecuredApiPaths).orElseGet(ArrayList::new);
 
 		return unsecuredApiPaths.stream().anyMatch(apiPath -> new AntPathMatcher().match(apiPath, request.getRequestURI()));
+	}
+
+	public boolean isSecureRequest(@NonNull final HttpServletRequest request) {
+		return !isUnsecureRequest(request);
 	}
 
 	/**

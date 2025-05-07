@@ -1,23 +1,22 @@
 package com.behl.flare.controller;
 
 import com.behl.flare.dto.UserResponse;
-import java.util.UUID;
-import org.apache.commons.lang3.RandomStringUtils;
+import com.behl.flare.enums.Roles;
 import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.behl.flare.configuration.PublicEndpoint;
+import com.behl.flare.annotations.PublicEndpoint;
 import com.behl.flare.dto.ExceptionResponseDto;
 import com.behl.flare.dto.TokenSuccessResponseDto;
 import com.behl.flare.dto.UserCreationRequest;
@@ -52,7 +51,7 @@ public class UserController {
 			@ApiResponse(responseCode = "400", description = "Invalid request body",
 					content = @Content(schema = @Schema(implementation = ExceptionResponseDto.class))) })
 	public ResponseEntity<HttpStatus> createUser(@Valid @RequestBody final UserCreationRequest userCreationRequest) {
-		userService.create(userCreationRequest);
+		userService.createFirebaseUser(userCreationRequest, Roles.ROLE_USER);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
@@ -72,7 +71,9 @@ public class UserController {
 	}
 
 
-    @PublicEndpoint
+//    @PublicEndpoint
+	@PreAuthorize("hasRole('ADMIN')")
+//	@PreAuthorize("hasAnyRole('ROLE1', 'ROLE2')")
     @Operation(summary = "Получение списка пользователей с пейджингом")
     @ApiResponse(responseCode = "200", description = "Success request")
     @GetMapping
