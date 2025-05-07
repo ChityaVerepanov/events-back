@@ -1,5 +1,6 @@
 package com.behl.flare.controller;
 
+import com.behl.flare.annotations.PublicEndpoint;
 import com.behl.flare.dto.ExceptionResponseDto;
 import com.behl.flare.dto.EventCardRequest;
 import com.behl.flare.dto.EventCardResponse;
@@ -73,7 +74,8 @@ public class EventController {
 	}
 
 
-	@PreAuthorize("hasAnyRole('ADMIN', 'CREATOR', 'USER')")
+	@PublicEndpoint
+//	@PreAuthorize("hasAnyRole('ADMIN', 'CREATOR', 'USER')")
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	@Operation(summary = "Получение мероприятий с пейджингом")
 	@ApiResponse(
