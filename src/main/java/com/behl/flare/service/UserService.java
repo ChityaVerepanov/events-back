@@ -1,6 +1,6 @@
 package com.behl.flare.service;
 
-import com.behl.flare.dto.UserResponse;
+import com.behl.flare.dto.user.UserResponse;
 import com.behl.flare.entity.User;
 import com.behl.flare.enums.Roles;
 import com.behl.flare.mappers.UserMapper;
@@ -17,8 +17,8 @@ import org.springframework.stereotype.Service;
 
 import com.behl.flare.client.FirebaseAuthClient;
 import com.behl.flare.dto.TokenSuccessResponseDto;
-import com.behl.flare.dto.UserCreationRequest;
-import com.behl.flare.dto.UserLoginRequestDto;
+import com.behl.flare.dto.user.UserCreationRequest;
+import com.behl.flare.dto.user.UserLoginRequestDto;
 import com.behl.flare.exception.AccountAlreadyExistsException;
 import com.behl.flare.exception.InvalidLoginCredentialsException;
 import com.google.firebase.auth.FirebaseAuth;

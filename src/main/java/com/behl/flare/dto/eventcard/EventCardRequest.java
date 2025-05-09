@@ -1,9 +1,10 @@
-package com.behl.flare.dto;
+package com.behl.flare.dto.eventcard;
 
 import com.behl.flare.enums.EventCategory;
 import com.behl.flare.enums.EventGenre;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -16,11 +17,13 @@ import lombok.Setter;
 @Schema(title = "EventRequest", accessMode = Schema.AccessMode.WRITE_ONLY)
 public class EventCardRequest {
 
+/*
 	@NotBlank(message = "Текст мероприятия не должен быть пустым")
 	@Schema(requiredMode = RequiredMode.REQUIRED,
 			description = "Текст мероприятия",
 			example = "Супертуса")
 	private String message;
+*/
 
 	@NotBlank(message = "Имя файла не должно быть пустым")
 	@Schema(requiredMode = RequiredMode.REQUIRED,
@@ -31,7 +34,7 @@ public class EventCardRequest {
 	@NotNull(message = "Идентификатор пользователя - создателя карточки")
 	@Schema(requiredMode = RequiredMode.REQUIRED,
 			description = "Идентификатор пользователя Firebase")
-	private String creatorId;
+	private Long creatorId;
 
 	@NotNull(message = "Название мероприятия не должно быть пустым")
 	@Schema(requiredMode = RequiredMode.REQUIRED,
@@ -76,5 +79,11 @@ public class EventCardRequest {
 	@Schema(requiredMode = RequiredMode.REQUIRED,
 			description = "Жанр мероприятия")
 	private EventGenre genre;
+
+	@Min(value = 0, message = "Стоимость не может быть отрицательной")
+	@NotNull(message = "Стоимость не может быть пустой")
+	@Schema(requiredMode = RequiredMode.REQUIRED,
+			description = "Стоимость")
+	private Integer cost;
 
 }

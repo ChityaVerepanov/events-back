@@ -1,4 +1,4 @@
-package com.behl.flare.dto;
+package com.behl.flare.dto.eventcard;
 
 import java.time.LocalDate;
 

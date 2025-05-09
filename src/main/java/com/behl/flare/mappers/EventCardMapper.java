@@ -1,12 +1,10 @@
 package com.behl.flare.mappers;
 
-import com.behl.flare.dto.EventCardRequest;
-import com.behl.flare.dto.EventCardResponse;
+import com.behl.flare.dto.eventcard.EventCardRequest;
+import com.behl.flare.dto.eventcard.EventCardResponse;
 import com.behl.flare.entity.EventCard;
 import com.behl.flare.entity.User;
 import com.behl.flare.repository.UserJpaRepository;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import lombok.NonNull;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -38,8 +36,9 @@ public abstract class EventCardMapper {
 
 
 //    @Transactional
-    public User creatorIdToUser(@NonNull String creatorFirebaseId) {
-        User user = userRepository.findByFirebaseId(creatorFirebaseId).orElseThrow();
+    public User creatorIdToUser(@NonNull Long creatorId) {
+//        User user = userRepository.findByFirebaseId(creatorFirebaseId).orElseThrow();
+        User user = userRepository.findById(creatorId).orElseThrow();
         return user;
     }
 

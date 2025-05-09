@@ -1,14 +1,12 @@
 package com.behl.flare.utility;
 
-import com.behl.flare.dto.UserCreationRequest;
-import com.behl.flare.entity.User;
+import com.behl.flare.dto.user.UserCreationRequest;
 import com.behl.flare.enums.Roles;
 import com.behl.flare.repository.UserJpaRepository;
 import com.behl.flare.service.UserService;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
-import jakarta.transaction.Transactional;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

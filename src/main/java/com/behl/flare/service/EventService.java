@@ -4,14 +4,15 @@ import com.behl.flare.entity.EventCard;
 import com.behl.flare.entity.User;
 import com.behl.flare.mappers.EventCardMapper;
 import com.behl.flare.repository.EventCardJpaRepository;
+import com.behl.flare.repository.UserJpaRepository;
 import jakarta.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.behl.flare.dto.EventCardRequest;
-import com.behl.flare.dto.EventCardResponse;
+import com.behl.flare.dto.eventcard.EventCardRequest;
+import com.behl.flare.dto.eventcard.EventCardResponse;
 import com.behl.flare.entity.Event;
 import com.behl.flare.exception.InvalidTaskIdException;
 import com.behl.flare.exception.TaskOwnershipViolationException;
@@ -34,6 +35,7 @@ public class EventService {
     private final EventCardJpaRepository eventCardJpaRepository;
     private final EventCardMapper eventCardMapper;
     private final UserService userService;
+    private final UserJpaRepository userJpaRepository;
 
 
     @Transactional
@@ -54,8 +56,9 @@ public class EventService {
     @Transactional
     public void createEventCard(@NonNull final EventCardRequest request) {
 
-        String firebaseId = userService.getCurrentUser().getFirebaseId();
-        request.setCreatorId(firebaseId);
+//        String firebaseId = userService.getCurrentUser().getFirebaseId();
+        Long userId = userService.getCurrentUser().getId();
+        request.setCreatorId(userId);
 
         EventCard eventCard = eventCardMapper.toEntity(request);
         User currentUser = userService.getCurrentUser();
@@ -120,18 +123,28 @@ public class EventService {
         return retrievedDocument;
     }
 
-/*
-    private EventCardResponse creatResponse(final DocumentSnapshot document, final Event event) {
-        return EventCardResponse.builder()
-                .id(document.getId())
-                .title(event.getTitle())
-                .status(event.getStatus())
-                .description(event.getDescription())
-                .createdAt(dateUtility.convert(document.getCreateTime()))
-                .updatedAt(dateUtility.convert(document.getUpdateTime()))
-                .build();
+
+    /**
+     * Добавление мероприятия в избранные текущему юзеру
+     */
+    @Transactional
+    public void addEventToFavorite(Long eventId) {
+        EventCard eventCard = eventCardJpaRepository.findById(eventId).orElseThrow();
+        User currentUser = userService.getCurrentUser();
+        currentUser.getFavoriteEvents().add(eventCard);
+        userJpaRepository.save(currentUser);
     }
-*/
+
+
+    /**
+     * Удаление мероприятия из избранного у текущего юзера
+     */
+    public void removeEventFromFavorite(Long eventId) {
+        EventCard eventCard = eventCardJpaRepository.findById(eventId).orElseThrow();
+        User currentUser = userService.getCurrentUser();
+        currentUser.getFavoriteEvents().remove(eventCard);
+        userJpaRepository.save(currentUser);
+    }
 
 
 }

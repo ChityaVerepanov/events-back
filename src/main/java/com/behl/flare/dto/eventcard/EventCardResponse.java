@@ -1,4 +1,4 @@
-package com.behl.flare.dto;
+package com.behl.flare.dto.eventcard;
 
 import com.behl.flare.enums.EventCategory;
 import com.behl.flare.enums.EventGenre;
@@ -20,10 +20,12 @@ public class EventCardResponse {
 			example = "100")
 	private Long id;
 
+/*
 	@Schema(requiredMode = RequiredMode.REQUIRED,
 			description = "Текст мероприятия",
 			example = "Супертуса")
 	private String message;
+*/
 
 	@Schema(requiredMode = RequiredMode.REQUIRED,
 			description = "Имя файла - картинки мероприятия",
@@ -70,5 +72,8 @@ public class EventCardResponse {
 			description = "Жанр мероприятия")
 	private EventGenre genre;
 
+	@Schema(requiredMode = RequiredMode.REQUIRED,
+			description = "Стоимость")
+	private Integer cost;
 
 }

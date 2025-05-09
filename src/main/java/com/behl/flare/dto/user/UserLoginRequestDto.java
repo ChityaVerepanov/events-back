@@ -1,4 +1,4 @@
-package com.behl.flare.dto;
+package com.behl.flare.dto.user;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;

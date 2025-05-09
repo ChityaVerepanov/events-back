@@ -33,8 +33,10 @@ public class EventCard {
     /**
      * Текст в карточке
      */
+/*
     @Column(name = "message", nullable = false)
     private String message;
+*/
 
     /**
      * Имя файла картинки, привязанного к карточке
@@ -97,6 +99,12 @@ public class EventCard {
     @Column(name = "genre")
     @Enumerated(EnumType.STRING)
     private EventGenre genre = EventGenre.DEFAULT;
+
+    /**
+     * Жанр мероприятия
+     */
+    @Column(name = "cost")
+    private Integer cost;
 
 
 

@@ -10,7 +10,7 @@ import com.behl.flare.configuration.FirebaseConfigurationProperties;
 import com.behl.flare.dto.FirebaseSignInRequestDto;
 import com.behl.flare.dto.FirebaseSignInResponseDto;
 import com.behl.flare.dto.TokenSuccessResponseDto;
-import com.behl.flare.dto.UserLoginRequestDto;
+import com.behl.flare.dto.user.UserLoginRequestDto;
 import com.behl.flare.exception.InvalidLoginCredentialsException;
 
 import lombok.NonNull;

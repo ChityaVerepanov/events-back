@@ -41,11 +41,17 @@ public class User {
 
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
-//    private Roles role = Roles.USER;
     private Roles role = Roles.ROLE_USER;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "creator")
-    private List<EventCard> eventCards = new ArrayList<>();
+
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "creator")
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<EventCard> favoriteEvents = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<EventCard> plannedEvents = new ArrayList<>();
+
+
 
 
     public boolean isCreatorOf(EventCard eventCard) {

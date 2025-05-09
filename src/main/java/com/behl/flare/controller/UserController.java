@@ -1,7 +1,6 @@
 package com.behl.flare.controller;
 
-import com.behl.flare.dto.EventCardResponse;
-import com.behl.flare.dto.UserResponse;
+import com.behl.flare.dto.user.UserResponse;
 import com.behl.flare.enums.Roles;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
@@ -20,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.behl.flare.annotations.PublicEndpoint;
 import com.behl.flare.dto.ExceptionResponseDto;
 import com.behl.flare.dto.TokenSuccessResponseDto;
-import com.behl.flare.dto.UserCreationRequest;
-import com.behl.flare.dto.UserLoginRequestDto;
+import com.behl.flare.dto.user.UserCreationRequest;
+import com.behl.flare.dto.user.UserLoginRequestDto;
 import com.behl.flare.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,7 +34,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/users")
+	@RequestMapping("/api/v1/users")
 @Tag(name = "User Management", description = "Endpoints for user account and authentication management")
 public class UserController {
 

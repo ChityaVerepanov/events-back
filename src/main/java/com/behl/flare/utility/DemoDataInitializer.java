@@ -1,6 +1,6 @@
 package com.behl.flare.utility;
 
-import com.behl.flare.dto.UserCreationRequest;
+import com.behl.flare.dto.user.UserCreationRequest;
 import com.behl.flare.enums.Roles;
 import com.behl.flare.service.UserService;
 import org.apache.commons.lang3.RandomStringUtils;

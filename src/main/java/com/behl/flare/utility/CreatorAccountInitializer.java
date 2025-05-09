@@ -1,6 +1,6 @@
 package com.behl.flare.utility;
 
-import com.behl.flare.dto.UserCreationRequest;
+import com.behl.flare.dto.user.UserCreationRequest;
 import com.behl.flare.enums.Roles;
 import com.behl.flare.service.UserService;
 import com.google.firebase.auth.FirebaseAuth;
@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 /**

@@ -2,9 +2,8 @@ package com.behl.flare.controller;
 
 import com.behl.flare.annotations.PublicEndpoint;
 import com.behl.flare.dto.ExceptionResponseDto;
-import com.behl.flare.dto.EventCardRequest;
-import com.behl.flare.dto.EventCardResponse;
-import com.behl.flare.dto.EventUpdateRequest;
+import com.behl.flare.dto.eventcard.EventCardRequest;
+import com.behl.flare.dto.eventcard.EventCardResponse;
 import com.behl.flare.service.EventService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -34,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/events")
 @Tag(name = "Events Management", description = "Endpoints for managing events.")
-public class EventController {
+public class EventCardController {
 
 	private final EventService eventService;
 
@@ -140,6 +139,39 @@ public class EventController {
 	public ResponseEntity<HttpStatus> delete(
 			@PathVariable(required = true, name = "eventId") Long eventId) {
 		eventService.delete(eventId);
+		return ResponseEntity.ok().build();
+	}
+
+
+
+	@PreAuthorize("hasAnyRole('ADMIN', 'CREATOR', 'USER')")
+	@Operation(summary = "Добавление мероприятия в избранное текущему юзеру")
+	@ApiResponse(responseCode = "200", description = "Мероприятие добавлено в избранное",
+			content = @Content(schema = @Schema(implementation = Void.class)))
+	@ApiResponse(responseCode = "401", description = "Сбой авторизации: Invalid access token",
+			content = @Content(schema = @Schema(implementation = ExceptionResponseDto.class)))
+	@ApiResponse(responseCode = "400", description = "Некорректное тело запроса",
+			content = @Content(schema = @Schema(implementation = ExceptionResponseDto.class)))
+	@PostMapping(value = "/favorite/{eventId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<HttpStatus> addEventToFavorite(
+			@PathVariable(required = true, name = "eventId") final Long eventId) {
+		eventService.addEventToFavorite(eventId);
+		return ResponseEntity.ok().build();
+	}
+
+
+	@PreAuthorize("hasAnyRole('ADMIN', 'CREATOR', 'USER')")
+	@Operation(summary = "Удаление мероприятия из избранного у текущего юзера")
+	@ApiResponse(
+			responseCode = "200", description = "Успешное удаление",
+			content = @Content(schema = @Schema(implementation = Void.class)))
+	@ApiResponse(
+			responseCode = "403", description = "Access denied: Insufficient permissions",
+			content = @Content(schema = @Schema(implementation = ExceptionResponseDto.class)))
+	@DeleteMapping(value = "/favorite/{eventId}")
+	public ResponseEntity<HttpStatus> removeEventFromFavorite(
+			@PathVariable(required = true, name = "eventId") Long eventId) {
+		eventService.removeEventFromFavorite(eventId);
 		return ResponseEntity.ok().build();
 	}
 
