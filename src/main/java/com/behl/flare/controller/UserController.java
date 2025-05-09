@@ -1,5 +1,6 @@
 package com.behl.flare.controller;
 
+import com.behl.flare.dto.EventCardResponse;
 import com.behl.flare.dto.UserResponse;
 import com.behl.flare.enums.Roles;
 import org.springdoc.core.annotations.ParameterObject;
@@ -72,11 +73,16 @@ public class UserController {
 
 
 	@PreAuthorize("hasRole('ADMIN')")
-//	@PreAuthorize("hasAnyRole('ROLE1', 'ROLE2')")
     @Operation(
 			summary = "Получение списка пользователей с пейджингом",
 			description = "Требуемые роли: ADMIN")
-    @ApiResponse(responseCode = "200", description = "Success request")
+    @ApiResponse(responseCode = "200", description = "Success request",
+			content = @Content(
+					mediaType = MediaType.APPLICATION_JSON_VALUE,
+					schema = @Schema(
+							implementation = UserResponse.class
+					)
+			))
     @GetMapping
     public Page<UserResponse> getUsers(
             @PageableDefault(page = 0, size = 10) @ParameterObject Pageable pageable

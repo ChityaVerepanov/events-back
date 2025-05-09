@@ -1,19 +1,13 @@
 package com.behl.flare.dto;
 
+import com.behl.flare.enums.EventCategory;
+import com.behl.flare.enums.EventGenre;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import java.time.LocalDateTime;
-
-import com.behl.flare.entity.TaskStatus;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import java.time.LocalDate;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.jackson.Jacksonized;
 
 @Getter
 @Setter
@@ -39,4 +33,42 @@ public class EventCardResponse {
 	@Schema(requiredMode = RequiredMode.REQUIRED,
 			description = "Идентификатор пользователя Firebase")
 	private String creatorId;
+
+	@Schema(requiredMode = RequiredMode.REQUIRED,
+			description = "Название мероприятия")
+	private String eventName;
+
+	@Schema(requiredMode = RequiredMode.REQUIRED,
+			description = "Описание мероприятия")
+	private String eventDescription;
+
+	@Schema(requiredMode = RequiredMode.REQUIRED,
+			description = "Дата начала мероприятия")
+	private LocalDate dateStart;
+
+	@Schema(requiredMode = RequiredMode.REQUIRED,
+			description = "Дата конца мероприятия")
+	private LocalDate dateEnd;
+
+	@Schema(requiredMode = RequiredMode.REQUIRED,
+			description = "Местоположение мероприятия")
+	private String place;
+
+	@Schema(requiredMode = RequiredMode.REQUIRED,
+			description = "Организатор мероприятия")
+	private String organizerName;
+
+	@Schema(requiredMode = RequiredMode.REQUIRED,
+			description = "Сайт компании")
+	private String organizerSite;
+
+	@Schema(requiredMode = RequiredMode.REQUIRED,
+			description = "Категория мероприятия")
+	private EventCategory category;
+
+	@Schema(requiredMode = RequiredMode.REQUIRED,
+			description = "Жанр мероприятия")
+	private EventGenre genre;
+
+
 }

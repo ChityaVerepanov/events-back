@@ -53,6 +53,10 @@ public class EventService {
 
     @Transactional
     public void createEventCard(@NonNull final EventCardRequest request) {
+
+        String firebaseId = userService.getCurrentUser().getFirebaseId();
+        request.setCreatorId(firebaseId);
+
         EventCard eventCard = eventCardMapper.toEntity(request);
         User currentUser = userService.getCurrentUser();
         eventCard.setCreator(currentUser);

@@ -53,7 +53,8 @@ public class EventController {
 	}
 
 
-	@PreAuthorize("hasAnyRole('ADMIN', 'CREATOR', 'USER')")
+//	@PreAuthorize("hasAnyRole('ADMIN', 'CREATOR', 'USER')")
+	@PublicEndpoint
 	@GetMapping(value = "/{eventId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Operation(summary = "Получение мероприятия")
 	@ApiResponse(
@@ -79,7 +80,14 @@ public class EventController {
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	@Operation(summary = "Получение мероприятий с пейджингом")
 	@ApiResponse(
-			responseCode = "200", description = "Task details retrieved successfully")
+			responseCode = "200", description = "Task details retrieved successfully",
+			content = @Content(
+					mediaType = MediaType.APPLICATION_JSON_VALUE,
+					schema = @Schema(
+							implementation = EventCardResponse.class
+					)
+			)
+	)
 	@ApiResponse(
 			responseCode = "401", description = "Сбой авторизации: Invalid access token",
 			content = @Content(schema = @Schema(implementation = ExceptionResponseDto.class)))
