@@ -26,6 +26,7 @@ services:
       - APPLICATION_FILES_STORAGE=/_files_storage
     networks:
       - events-backend-network
+    restart: unless-stopped
 
 
   events-backend-db:
