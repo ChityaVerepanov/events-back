@@ -11,6 +11,8 @@ services:
     container_name: events-backend
     ports:
       - 43546:8855
+    volumes:
+      - ./_files_storage:/_files_storage
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://events-backend-db/events-backend
       - SPRING_DATASOURCE_USERNAME=postgres
@@ -21,13 +23,14 @@ services:
       - APPLICATION_CREATOR_EMAIL=${CREATOR_EMAIL}
       - APPLICATION_CREATOR_PASSWORD=${CREATOR_PASSWORD}
       - APPLICATION_CREATOR_NAME=${CREATOR_NAME}
+      - APPLICATION_FILES_STORAGE=/_files_storage
     networks:
       - events-backend-network
 
 
   events-backend-db:
-    mem_limit: 256m
-    cpus: '0.5'
+    mem_limit: 1024m
+    cpus: '1'
     image: postgres:10.23-alpine3.16
     hostname: events-backend-db
     container_name: events-backend-db
