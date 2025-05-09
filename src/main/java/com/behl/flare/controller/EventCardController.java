@@ -152,10 +152,10 @@ public class EventCardController {
 			content = @Content(schema = @Schema(implementation = ExceptionResponseDto.class)))
 	@ApiResponse(responseCode = "400", description = "Некорректное тело запроса",
 			content = @Content(schema = @Schema(implementation = ExceptionResponseDto.class)))
-	@PostMapping(value = "/favorite/{eventId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/favorite/{eventCardId}")
 	public ResponseEntity<HttpStatus> addEventToFavorite(
-			@PathVariable(required = true, name = "eventId") final Long eventId) {
-		eventService.addEventToFavorite(eventId);
+			@PathVariable(required = true, name = "eventCardId") final Long eventCardId) {
+		eventService.addEventToFavorite(eventCardId);
 		return ResponseEntity.ok().build();
 	}
 
@@ -168,10 +168,41 @@ public class EventCardController {
 	@ApiResponse(
 			responseCode = "403", description = "Access denied: Insufficient permissions",
 			content = @Content(schema = @Schema(implementation = ExceptionResponseDto.class)))
-	@DeleteMapping(value = "/favorite/{eventId}")
+	@DeleteMapping(value = "/favorite/{eventCardId}")
 	public ResponseEntity<HttpStatus> removeEventFromFavorite(
-			@PathVariable(required = true, name = "eventId") Long eventId) {
-		eventService.removeEventFromFavorite(eventId);
+			@PathVariable(required = true, name = "eventCardId") Long eventCardId) {
+		eventService.removeEventFromFavorite(eventCardId);
+		return ResponseEntity.ok().build();
+	}
+
+	@PreAuthorize("hasAnyRole('ADMIN', 'CREATOR', 'USER')")
+	@Operation(summary = "Добавление мероприятия в запланированные текущему юзеру")
+	@ApiResponse(responseCode = "200", description = "Мероприятие добавлено в запланированные",
+			content = @Content(schema = @Schema(implementation = Void.class)))
+	@ApiResponse(responseCode = "401", description = "Сбой авторизации: Invalid access token",
+			content = @Content(schema = @Schema(implementation = ExceptionResponseDto.class)))
+	@ApiResponse(responseCode = "400", description = "Некорректное тело запроса",
+			content = @Content(schema = @Schema(implementation = ExceptionResponseDto.class)))
+	@PostMapping(value = "/planned/{eventCardId}")
+	public ResponseEntity<HttpStatus> addEventToPlanned(
+			@PathVariable(required = true, name = "eventCardId") final Long eventCardId) {
+		eventService.addEventToPlanned(eventCardId);
+		return ResponseEntity.ok().build();
+	}
+
+
+	@PreAuthorize("hasAnyRole('ADMIN', 'CREATOR', 'USER')")
+	@Operation(summary = "Удаление мероприятия из запланированных у текущего юзера")
+	@ApiResponse(
+			responseCode = "200", description = "Успешное удаление",
+			content = @Content(schema = @Schema(implementation = Void.class)))
+	@ApiResponse(
+			responseCode = "403", description = "Access denied: Insufficient permissions",
+			content = @Content(schema = @Schema(implementation = ExceptionResponseDto.class)))
+	@DeleteMapping(value = "/planned/{eventCardId}")
+	public ResponseEntity<HttpStatus> removeEventFromPlanned(
+			@PathVariable(required = true, name = "eventCardId") Long eventCardId) {
+		eventService.removeEventFromPlanned(eventCardId);
 		return ResponseEntity.ok().build();
 	}
 

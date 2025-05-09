@@ -7,6 +7,8 @@ import com.google.firebase.auth.FirebaseToken;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -30,11 +32,20 @@ public abstract class UserMapper {
 
 
 //    @Named("mapEventCardIds")
+/*
     List<Long> mapEventCardIds(List<EventCard> eventCards) {
         if (eventCards == null) {
             return Collections.emptyList();
         }
         return eventCards.stream().map(EventCard::getId).toList();
+    }
+*/
+
+    Set<Long> mapEventCardIds(Set<EventCard> eventCards) {
+        if (eventCards == null) {
+            return Collections.emptySet();
+        }
+        return eventCards.stream().map(EventCard::getId).collect(Collectors.toSet());
     }
 
     protected String getFirebaseTokenClaim(FirebaseToken firebaseToken, String key) {

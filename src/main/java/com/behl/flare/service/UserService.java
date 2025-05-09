@@ -170,4 +170,11 @@ public class UserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return (User) authentication.getPrincipal();
     }
+
+
+    @Transactional
+    public UserResponse getUserDetails() {
+        User currentUser = getCurrentUser();
+        return userMapper.toResponse(currentUser);
+    }
 }

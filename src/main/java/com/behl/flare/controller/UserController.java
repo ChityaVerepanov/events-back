@@ -90,4 +90,20 @@ public class UserController {
     }
 
 
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER', 'CREATOR')")
+    @Operation(
+			summary = "Получение данных текущего пользователя")
+    @ApiResponse(responseCode = "200", description = "Success request",
+			content = @Content(
+					mediaType = MediaType.APPLICATION_JSON_VALUE,
+					schema = @Schema(
+							implementation = UserResponse.class
+					)
+			))
+	@GetMapping(value = "/user_details", produces = MediaType.APPLICATION_JSON_VALUE)
+    public UserResponse getUserDetails() {
+        return userService.getUserDetails();
+    }
+
+
 }

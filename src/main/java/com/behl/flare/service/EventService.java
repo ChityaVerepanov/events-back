@@ -7,6 +7,8 @@ import com.behl.flare.repository.EventCardJpaRepository;
 import com.behl.flare.repository.UserJpaRepository;
 import jakarta.transaction.Transactional;
 
+import java.util.function.Predicate;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EventService {
@@ -133,18 +136,43 @@ public class EventService {
         User currentUser = userService.getCurrentUser();
         currentUser.getFavoriteEvents().add(eventCard);
         userJpaRepository.save(currentUser);
+        log.info("User: {}. Added favorite event: {}", currentUser.getId(), eventCard.getId());
     }
 
 
     /**
      * Удаление мероприятия из избранного у текущего юзера
      */
-    public void removeEventFromFavorite(Long eventId) {
-        EventCard eventCard = eventCardJpaRepository.findById(eventId).orElseThrow();
+    @Transactional
+    public void removeEventFromFavorite(Long eventCardId) {
         User currentUser = userService.getCurrentUser();
-        currentUser.getFavoriteEvents().remove(eventCard);
+        currentUser.getFavoriteEvents().removeIf(eventCard1 -> eventCard1.getId().equals(eventCardId));
         userJpaRepository.save(currentUser);
+        log.info("User: {}. Removed favorite event: {}", currentUser.getId(), eventCardId);
     }
 
 
+    /**
+     * Добавление мероприятия в запланированные текущему юзеру
+     */
+    @Transactional
+    public void addEventToPlanned(Long eventCardId) {
+        EventCard eventCard = eventCardJpaRepository.findById(eventCardId).orElseThrow();
+        User currentUser = userService.getCurrentUser();
+        currentUser.getPlannedEvents().add(eventCard);
+        userJpaRepository.save(currentUser);
+        log.info("User: {}. Added planned event: {}", currentUser.getId(), eventCard.getId());
+    }
+
+
+    /**
+     * Удаление мероприятия из избранного у текущего юзера
+     */
+    @Transactional
+    public void removeEventFromPlanned(Long eventCardId) {
+        User currentUser = userService.getCurrentUser();
+        currentUser.getPlannedEvents().removeIf(eventCard1 -> eventCard1.getId().equals(eventCardId));
+        userJpaRepository.save(currentUser);
+        log.info("User: {}. Removed planned event: {}", currentUser.getId(), eventCardId);
+    }
 }

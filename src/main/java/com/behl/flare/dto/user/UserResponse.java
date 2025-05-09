@@ -2,7 +2,9 @@ package com.behl.flare.dto.user;
 
 import com.behl.flare.enums.Roles;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,7 +18,9 @@ public class UserResponse {
     private String phoneNumber;
     private String displayName;
     private Roles role;
-    private List<Long> favoriteEvents = new ArrayList<>();
-    private List<Long> plannedEvents = new ArrayList<>();
+//    private List<Long> favoriteEvents = new ArrayList<>();
+//    private List<Long> plannedEvents = new ArrayList<>();
+    private Set<Long> favoriteEvents = new HashSet<>();
+    private Set<Long> plannedEvents = new HashSet<>();
 
 }

@@ -13,16 +13,21 @@ import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Getter
 @Setter
 @Entity
 @Table(name = "users", indexes = @Index(columnList = "firebaseId"))
 public class User {
 
+    @EqualsAndHashCode.Include
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -44,12 +49,13 @@ public class User {
     private Roles role = Roles.ROLE_USER;
 
 
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "creator")
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<EventCard> favoriteEvents = new ArrayList<>();
+    @OneToMany(fetch = FetchType.EAGER)
+//    private List<EventCard> favoriteEvents = new ArrayList<>();
+    private Set<EventCard> favoriteEvents = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<EventCard> plannedEvents = new ArrayList<>();
+    @OneToMany(fetch = FetchType.EAGER)
+//    private List<EventCard> plannedEvents = new ArrayList<>();
+    private Set<EventCard> plannedEvents = new HashSet<>();
 
 
 
