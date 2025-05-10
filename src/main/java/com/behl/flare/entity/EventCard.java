@@ -56,7 +56,8 @@ public class EventCard {
     /**
      * Описание мероприятия
      */
-    @Column(name = "event_description")
+//    @Column(name = "event_description")
+    @Column(name = "event_description", columnDefinition = "TEXT")
     private String eventDescription;
 
     /**
