@@ -34,7 +34,7 @@ public class EventCardResponse {
 
 	@Schema(requiredMode = RequiredMode.REQUIRED,
 			description = "Идентификатор пользователя Firebase")
-	private String creatorId;
+	private Long creatorId;
 
 	@Schema(requiredMode = RequiredMode.REQUIRED,
 			description = "Название мероприятия")
