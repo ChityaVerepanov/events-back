@@ -7,7 +7,6 @@ import com.behl.flare.repository.EventCardJpaRepository;
 import com.behl.flare.repository.UserJpaRepository;
 import jakarta.transaction.Transactional;
 
-import java.util.function.Predicate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +16,7 @@ import com.behl.flare.dto.eventcard.EventCardRequest;
 import com.behl.flare.dto.eventcard.EventCardResponse;
 import com.behl.flare.entity.Event;
 import com.behl.flare.exception.InvalidTaskIdException;
-import com.behl.flare.exception.TaskOwnershipViolationException;
+import com.behl.flare.exception.UserRoleViolationException;
 import com.behl.flare.utility.AuthenticatedUserIdProvider;
 import com.behl.flare.utility.DateUtility;
 import com.google.cloud.firestore.DocumentSnapshot;
@@ -98,8 +97,9 @@ public class EventService {
      *
      * @param event the record to be verified for ownership.
      * @throws IllegalArgumentException        if provided argument is {@code null}
-     * @throws TaskOwnershipViolationException on validation failure
+     * @throws UserRoleViolationException on validation failure
      */
+/*
     private void verifyTaskOwnership(@NonNull final Event event) {
         final var userId = authenticatedUserIdProvider.getUserId();
         final var taskBelongsToUser = event.getCreatedBy().equals(userId);
@@ -107,6 +107,7 @@ public class EventService {
             throw new TaskOwnershipViolationException();
         }
     }
+*/
 
     /**
      * Retrieves a task document from Firestore database corresponding to

@@ -1,5 +1,7 @@
 package com.behl.flare.controller;
 
+import com.behl.flare.dto.eventcard.EventCardRequest;
+import com.behl.flare.dto.user.UserRequest;
 import com.behl.flare.dto.user.UserResponse;
 import com.behl.flare.enums.Roles;
 import org.springdoc.core.annotations.ParameterObject;
@@ -11,7 +13,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -104,6 +108,29 @@ public class UserController {
     public UserResponse getUserDetails() {
         return userService.getUserDetails();
     }
+
+
+	@PreAuthorize("hasAnyRole('ADMIN')")
+	@PutMapping(value = "/{userId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@Operation(summary = "Обновление пользователя")
+	@ApiResponse(
+			responseCode = "200", description = "Updated successfully",
+			content = @Content(schema = @Schema(implementation = Void.class)))
+	@ApiResponse(
+			responseCode = "404", description = "No user with provided Id",
+			content = @Content(schema = @Schema(implementation = ExceptionResponseDto.class)))
+	@ApiResponse(
+			responseCode = "401", description = "Authentication failure: Invalid access token",
+			content = @Content(schema = @Schema(implementation = ExceptionResponseDto.class)))
+	@ApiResponse(
+			responseCode = "403", description = "Access denied: Insufficient permissions",
+			content = @Content(schema = @Schema(implementation = ExceptionResponseDto.class)))
+	public ResponseEntity<HttpStatus> update(
+			@PathVariable(required = true, name = "userId") Long userId,
+			@Valid @RequestBody UserRequest request) {
+		userService.updateUserById(userId, request);
+		return ResponseEntity.ok().build();
+	}
 
 
 }

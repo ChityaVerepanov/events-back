@@ -20,13 +20,14 @@ buildme.sh
 | DELETE /api/v1/events                    |        |   +   |  -   | + (owned) |
 | PUT /api/v1/events                       |        |   +   |  -   | + (owned) |
 | GET /api/v1/events/                      |   +    |       |      |           |
-| GET /api/v1/users                        |        |   +   |  -   |     -     |
 | POST /api/v1/events/favorite/{eventId}   |        |   +   |  +   |     +     |
 | DELETE /api/v1/events/favorite/{eventId} |        |   +   |  +   |     +     |
 | POST /api/v1/events/planned/{eventId}    |        |   +   |  +   |     +     |
 | DELETE /api/v1/events/planned/{eventId}  |        |   +   |  +   |     +     |
 | POST /api/v1/images/upload               |        |   +   |  -   |     +     |
 | GET /api/v1/images/{fileName}            |   +    |       |      |           |
+| GET /api/v1/users                        |        |   +   |  -   |     -     |
+| PUT /api/v1/users                        |        |   +   |  -   |     -     |
 
 
 
