@@ -18,6 +18,12 @@ import lombok.Setter;
 @Schema(title = "UserCreationRequest", accessMode = Schema.AccessMode.WRITE_ONLY)
 public class UserCreationRequest {
 
+//	@NotBlank(message = "Имя файла не должно быть пустым")
+	@Schema(requiredMode = RequiredMode.NOT_REQUIRED,
+			description = "Имя файла - аватарки",
+			example = "Какое-то имя файла...")
+	private String fileName;
+
 	@NotBlank(message = "Email must not be empty")
 	@Email(message = "Email must be of valid format")
 	@Schema(requiredMode = RequiredMode.REQUIRED, description = "email of user", example = "hardik.behl7444@gmail.com")

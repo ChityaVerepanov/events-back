@@ -57,7 +57,11 @@ public class User {
 //    private List<EventCard> plannedEvents = new ArrayList<>();
     private Set<EventCard> plannedEvents = new HashSet<>();
 
-
+    /**
+     * Имя файла картинки, привязанного к карточке
+     */
+    @Column(name = "file_name")
+    private String fileName;
 
 
     public boolean isCreatorOf(EventCard eventCard) {

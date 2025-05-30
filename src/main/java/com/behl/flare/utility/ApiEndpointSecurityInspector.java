@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
@@ -31,6 +32,7 @@ import lombok.RequiredArgsConstructor;
  * @see PublicEndpoint
  * @see com.behl.flare.configuration.OpenApiConfigurationProperties
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 @EnableConfigurationProperties(OpenApiConfigurationProperties.class)
@@ -84,7 +86,18 @@ public class ApiEndpointSecurityInspector {
 		var unsecuredApiPaths = getUnsecuredApiPaths(requestHttpMethod);
 		unsecuredApiPaths = Optional.ofNullable(unsecuredApiPaths).orElseGet(ArrayList::new);
 
-		return unsecuredApiPaths.stream().anyMatch(apiPath -> new AntPathMatcher().match(apiPath, request.getRequestURI()));
+		boolean isUnsecure = unsecuredApiPaths.stream().anyMatch(apiPath -> new AntPathMatcher().match(apiPath, request.getRequestURI()));
+		log.info("ApiEndpointSecurityInspector.isUnsecureRequest. API path '{}' is unsecured: {}", request.getRequestURI(), isUnsecure);
+		return isUnsecure;
+/*
+		String requestURI = request.getRequestURI();
+		for (String apiPath : unsecuredApiPaths) {
+            if (new AntPathMatcher().match(apiPath, requestURI)) {
+                return true;
+            }
+        }
+        return false;
+*/
 	}
 
 	public boolean isSecureRequest(@NonNull final HttpServletRequest request) {

@@ -39,6 +39,11 @@ public class UserRequest {
 	private String phoneNumber;
 */
 
+//	@NotBlank(message = "Имя файла не должно быть пустым")
+	@Schema(requiredMode = RequiredMode.NOT_REQUIRED,
+			description = "Имя файла - аватарки",
+			example = "Какое-то имя файла...")
+	private String fileName;
 
 	@NotBlank(message = "Имя и фамилия не могут быть пустыми")
 	@Schema(requiredMode = RequiredMode.REQUIRED, description = "Имя и фамилия", example = "Иван Иванов")

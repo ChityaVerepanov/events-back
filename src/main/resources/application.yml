@@ -33,3 +33,8 @@ com:
         title: Events-Service-Backend
         description: Backend application integrating with firebase authentication and storage service to build a secure CRUD application
 
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG

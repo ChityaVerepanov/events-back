@@ -20,6 +20,7 @@ buildme.sh
 | DELETE /api/v1/events                    |        |   +   |  -   | + (owned) |
 | PUT /api/v1/events                       |        |   +   |  -   | + (owned) |
 | GET /api/v1/events/                      |   +    |       |      |           |
+| GET /api/v1/events/byCreator             |        |   +   |  -   |     +     |
 | POST /api/v1/events/favorite/{eventId}   |        |   +   |  +   |     +     |
 | DELETE /api/v1/events/favorite/{eventId} |        |   +   |  +   |     +     |
 | POST /api/v1/events/planned/{eventId}    |        |   +   |  +   |     +     |

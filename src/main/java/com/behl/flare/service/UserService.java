@@ -95,6 +95,7 @@ public class UserService {
 
         // Создание/обновление локального юзера
         updateUser(
+                userCreationRequest.getFileName(),
                 userCreationRequest.getEmail(),
                 userRecord.getUid(),
                 userCreationRequest.getDisplayName(),
@@ -107,12 +108,15 @@ public class UserService {
      * Создание / обновление локального юзера
      */
     @Transactional
-    public void updateUser(String email, String firebaseId, String displayName, String phoneNumber, Roles role) {
+    public void updateUser(String filename, String email, String firebaseId, String displayName, String phoneNumber, Roles role) {
         // Создание/обновление локального юзера
         User user = userJpaRepository.findByEmail(email)
                 .stream()
                 .findFirst()
                 .orElseGet(User::new);
+        if (StringUtils.isNotBlank(filename)) {
+            user.setFileName(filename);
+        }
         user.setFirebaseId(firebaseId);
         user.setEmail(email);
         user.setDisplayName(StringUtils.stripToEmpty(displayName));
@@ -207,6 +211,7 @@ public class UserService {
 //        user.setPhoneNumber(request.getPhoneNumber());
         user.setDisplayName(request.getDisplayName());
         user.setRole(request.getRole());
+        user.setFileName(request.getFileName());
         userJpaRepository.save(user);
     }
 

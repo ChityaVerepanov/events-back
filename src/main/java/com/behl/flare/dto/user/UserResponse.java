@@ -1,6 +1,8 @@
 package com.behl.flare.dto.user;
 
 import com.behl.flare.enums.Roles;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -22,5 +24,7 @@ public class UserResponse {
 //    private List<Long> plannedEvents = new ArrayList<>();
     private Set<Long> favoriteEvents = new HashSet<>();
     private Set<Long> plannedEvents = new HashSet<>();
+    private String fileName;
+
 
 }

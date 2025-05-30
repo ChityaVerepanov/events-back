@@ -15,8 +15,8 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public abstract class UserMapper {
 
-//    @Mapping(source = "eventCards", target = "eventCards"/*, qualifiedByName = "mapEventCardIds"*/)
     public abstract UserResponse toResponse(User entity);
+
 
     @Mapping(target = "phoneNumber", expression = "java(getFirebaseTokenClaim(firebaseToken, \"phoneNumber\"))")
     @Mapping(source = "firebaseId", target = "firebaseId")
@@ -27,19 +27,10 @@ public abstract class UserMapper {
     @Mapping(target = "role", ignore = true)
     @Mapping(target = "plannedEvents", ignore = true)
     @Mapping(target = "favoriteEvents", ignore = true)
+    @Mapping(target = "fileName", ignore = true)
     public abstract User toEntity(String firebaseId, FirebaseToken firebaseToken);
 
 
-
-//    @Named("mapEventCardIds")
-/*
-    List<Long> mapEventCardIds(List<EventCard> eventCards) {
-        if (eventCards == null) {
-            return Collections.emptyList();
-        }
-        return eventCards.stream().map(EventCard::getId).toList();
-    }
-*/
 
     Set<Long> mapEventCardIds(Set<EventCard> eventCards) {
         if (eventCards == null) {

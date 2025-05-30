@@ -2,6 +2,8 @@ package com.behl.flare.service;
 
 import com.behl.flare.entity.EventCard;
 import com.behl.flare.entity.User;
+import com.behl.flare.enums.Roles;
+import com.behl.flare.exception.AccessDeniedByRoleException;
 import com.behl.flare.mappers.EventCardMapper;
 import com.behl.flare.repository.EventCardJpaRepository;
 import com.behl.flare.repository.UserJpaRepository;
@@ -51,6 +53,32 @@ public class EventService {
     public Page<EventCardResponse> getEventCards(Pageable pageable) {
         Page<EventCard> all = eventCardJpaRepository.findAll(pageable);
         Page<EventCardResponse> response = all.map(eventCardMapper::toResponse);
+        return response;
+    }
+
+
+    /**
+     * Получение мероприятий с пейджингом.
+     * Для пользователя с ролью CREATOR возвращаются только его мероприятия.
+     * Для пользователя с полью ADMIN возвращаются все мероприятия.
+     *
+     * @param pageable - пейджинг
+     * @return страницу с DTO мероприятий
+     */
+    @Transactional
+    public Page<EventCardResponse> getEventCardsByCreator(Pageable pageable) {
+        User currentUser = userService.getCurrentUser();
+        Roles role = currentUser.getRole();
+
+        Page<EventCard> events;
+        switch (role) {
+            case ROLE_ADMIN -> events = eventCardJpaRepository.findAll(pageable);
+            case ROLE_CREATOR -> events = eventCardJpaRepository.findAllByCreatorId(currentUser.getId(), pageable);
+            default -> throw new AccessDeniedByRoleException();
+        }
+
+//        Page<EventCard> all = eventCardJpaRepository.findAll(pageable);
+        Page<EventCardResponse> response = events.map(eventCardMapper::toResponse);
         return response;
     }
 
@@ -176,4 +204,5 @@ public class EventService {
         userJpaRepository.save(currentUser);
         log.info("User: {}. Removed planned event: {}", currentUser.getId(), eventCardId);
     }
+
 }

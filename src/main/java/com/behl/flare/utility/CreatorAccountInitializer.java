@@ -65,6 +65,7 @@ public class CreatorAccountInitializer implements CommandLineRunner {
             log.info("Firebase. CREATOR user is already exist!");
             log.info("Firebase. CREATOR user updating!");
             userService.updateUser(
+                    "",
                     creatorEmail,
                     userRecord.getUid(),
                     creatorName,

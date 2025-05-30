@@ -67,6 +67,7 @@ public class AdminAccountInitializer implements CommandLineRunner {
             log.info("Firebase. Admin user is already exist!");
             log.info("Firebase. Admin user updating!");
             userService.updateUser(
+                    "",
                     adminEmail,
                     userRecord.getUid(),
                     adminName,
