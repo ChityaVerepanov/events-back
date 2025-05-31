@@ -1,9 +1,11 @@
 package com.behl.flare.controller;
 
 import com.behl.flare.dto.eventcard.EventCardRequest;
+import com.behl.flare.dto.user.FirebaseUserSyncRequest;
 import com.behl.flare.dto.user.UserRequest;
 import com.behl.flare.dto.user.UserResponse;
 import com.behl.flare.enums.Roles;
+import com.google.firebase.auth.FirebaseAuthException;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -57,6 +59,23 @@ public class UserController {
     public ResponseEntity<HttpStatus> createUser(@Valid @RequestBody final UserCreationRequest userCreationRequest) {
         userService.createFirebaseUser(userCreationRequest, Roles.ROLE_USER);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PublicEndpoint
+    @PostMapping(value = "sync", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Sync a user record with Firebase", description = "Sync user record in the system corresponding to the provided information")
+    @ApiResponse(responseCode = "200", description = "Sync successfull",
+            content = @Content(schema = @Schema(implementation = UserResponse.class)))
+    @ApiResponse(responseCode = "201", description = "User record created successfully",
+            content = @Content(schema = @Schema(implementation = Void.class)))
+    @ApiResponse(responseCode = "409", description = "User account with provided email-id already exists",
+            content = @Content(schema = @Schema(implementation = ExceptionResponseDto.class)))
+    @ApiResponse(responseCode = "400", description = "Invalid request body",
+            content = @Content(schema = @Schema(implementation = ExceptionResponseDto.class)))
+    public ResponseEntity<UserResponse> syncFirebaseUser(
+            @Valid @RequestBody final FirebaseUserSyncRequest firebaseUserSyncRequest) throws FirebaseAuthException {
+        UserResponse userResponse = userService.firebaseUserSync(firebaseUserSyncRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
     }
 
     @PublicEndpoint

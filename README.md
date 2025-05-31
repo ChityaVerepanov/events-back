@@ -32,6 +32,7 @@ buildme.sh
 | GET /api/v1/users                        |        |   +   |     -     |     -     |
 | GET /api/v1/users/user_details           |        |   +   |     +     |     +     |
 | PUT /api/v1/users/{userId}               |        |   +   | + (owned) | + (owned) |
+| POST /api/v1/users/sync                  |   +    |       |           |           |
 
 
 

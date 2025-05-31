@@ -1,5 +1,6 @@
 package com.behl.flare.service;
 
+import com.behl.flare.dto.user.FirebaseUserSyncRequest;
 import com.behl.flare.dto.user.UserRequest;
 import com.behl.flare.dto.user.UserResponse;
 import com.behl.flare.entity.User;
@@ -225,9 +226,27 @@ public class UserService {
         }
 
 
-
-
     }
 
 
+    /**
+     * Синхронизация юзера, зарегистрированного через Google, с локальной БД
+     */
+    @Transactional
+    public UserResponse firebaseUserSync(@Valid FirebaseUserSyncRequest request) throws FirebaseAuthException {
+        String token = request.getToken();
+        // Верификация токена Firebase
+        FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(token);
+        String uid = decodedToken.getUid();
+        // Поиск существующего пользователя
+        User user = userJpaRepository.findByFirebaseId(uid).orElseGet(() -> {
+            User newUser = new User();
+            newUser.setFirebaseId(decodedToken.getUid());
+            newUser.setEmail(decodedToken.getEmail());
+            newUser.setDisplayName(decodedToken.getName());
+            userJpaRepository.save(newUser);
+            return newUser;
+        });
+        return userMapper.toResponse(user);
+    }
 }
