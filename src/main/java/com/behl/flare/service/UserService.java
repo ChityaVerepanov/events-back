@@ -4,15 +4,14 @@ import com.behl.flare.dto.user.UserRequest;
 import com.behl.flare.dto.user.UserResponse;
 import com.behl.flare.entity.User;
 import com.behl.flare.enums.Roles;
+import com.behl.flare.exception.AccessDeniedNotOwned;
 import com.behl.flare.exception.UserRoleViolationException;
 import com.behl.flare.mappers.UserMapper;
 import com.behl.flare.repository.UserJpaRepository;
 import com.google.firebase.auth.FirebaseToken;
 import com.google.firebase.auth.UserRecord;
-import com.google.firebase.auth.UserRecord.UpdateRequest;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
@@ -199,20 +198,35 @@ public class UserService {
     @SneakyThrows
     @Transactional
     public void updateUserById(Long userId, @Valid UserRequest request) {
-        // Текущий юзер не может менять себе роль
         Long currentUserId = getCurrentUser().getId();
-        if (currentUserId.equals(userId)) {
-            throw new UserRoleViolationException();
+        User managedUser = userJpaRepository.findById(userId).orElseThrow();
+        Roles role = getCurrentUser().getRole();
+        switch (role) {
+            case ROLE_ADMIN -> {
+                // Текущий юзер ADMIN не может менять себе роль
+                if (currentUserId.equals(userId)) {
+                    throw new UserRoleViolationException();
+                }
+                managedUser.setDisplayName(request.getDisplayName());
+                managedUser.setRole(request.getRole());
+                managedUser.setFileName(request.getFileName());
+                userJpaRepository.save(managedUser);
+            }
+            case ROLE_USER, ROLE_CREATOR -> {
+                // Юзеры могут менять только свои параметры, кроме роли
+                if (currentUserId.equals(userId)) {
+                    managedUser.setDisplayName(request.getDisplayName());
+                    managedUser.setFileName(request.getFileName());
+                    userJpaRepository.save(managedUser);
+                } else {
+                    throw new AccessDeniedNotOwned();
+                }
+            }
         }
 
-        User user = userJpaRepository.findById(userId).orElseThrow();
-//        user.setFirebaseId(request.getFirebaseId());
-//        user.setEmail(request.getEmail());
-//        user.setPhoneNumber(request.getPhoneNumber());
-        user.setDisplayName(request.getDisplayName());
-        user.setRole(request.getRole());
-        user.setFileName(request.getFileName());
-        userJpaRepository.save(user);
+
+
+
     }
 
 

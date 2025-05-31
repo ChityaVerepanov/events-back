@@ -110,7 +110,8 @@ public class UserController {
     }
 
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    //    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER', 'CREATOR')")
     @PutMapping(value = "/{userId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Обновление пользователя")
     @ApiResponse(

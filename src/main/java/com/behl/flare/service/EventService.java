@@ -116,6 +116,13 @@ public class EventService {
         User currentUser = userService.getCurrentUser();
         EventCard eventCard = eventCardJpaRepository.findById(eventId).orElseThrow();
         if (currentUser.isCreatorOf(eventCard) || currentUser.isAdmin()) {
+            // Было лень настраивать каскадные связи, сделал так
+            userJpaRepository.findAll().forEach(user -> {
+                user.getFavoriteEvents().remove(eventCard);
+                user.getPlannedEvents().remove(eventCard);
+                userJpaRepository.save(user);
+            });
+
             eventCardJpaRepository.delete(eventCard);
         }
     }
