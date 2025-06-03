@@ -10,6 +10,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
@@ -49,12 +52,24 @@ public class User {
     private Roles role = Roles.ROLE_USER;
 
 
-    @OneToMany(fetch = FetchType.EAGER)
+    //    @OneToMany(fetch = FetchType.EAGER)
 //    private List<EventCard> favoriteEvents = new ArrayList<>();
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_favorite_events",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "event_card_id")
+    )
     private Set<EventCard> favoriteEvents = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.EAGER)
+    //    @OneToMany(fetch = FetchType.EAGER)
 //    private List<EventCard> plannedEvents = new ArrayList<>();
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_planned_events",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "event_card_id")
+    )
     private Set<EventCard> plannedEvents = new HashSet<>();
 
     /**
